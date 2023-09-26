@@ -36,5 +36,25 @@ class Restaurants(Resource):
         )
 api.add_resource(Restaurants, "/restaurants")
 
+
+class SingleRestaurant(Resource):
+    def get(self, id):
+        restaurant = Restaurant.query.filter_by(id = id).first_or_404()
+        return make_response(
+            jsonify(
+                {
+                    "id": restaurant.id,
+                    "name": restaurant.name,
+                    "address": restaurant.address,
+                    "pizzas": (
+                        [{"id": p.id, "name": p.name, "ingredients": p.ingredients} for p in restaurant.pizzas_associate]
+                        if len(restaurant.pizzas_associate) > 0
+                        else [{"message": "No pizzas for this restaurant"}]
+                    )
+                }
+            ), 200
+        )
+api.add_resource(SingleRestaurant, "/restaurants/<int:id>")
+
 if __name__ == '__main__':
     app.run(debug=True)
