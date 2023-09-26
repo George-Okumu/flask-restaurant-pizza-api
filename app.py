@@ -73,19 +73,31 @@ api.add_resource(Pizzas, '/pizzas')
 class RestauPizza(Resource):
     def post(self):
         data = request.get_json()
+        pizzs = Pizza.query.filter_by(id=data['pizza_id']).first()
+        res = Restaurant.query.filter_by(id=data['restaurant_id']).first()
+
+        if not pizzs or not res:
+            return make_response(
+                jsonify(
+                {"message": "Pizza or restaurant not found"}
+            ), 404
+            )
 
         new_obj = RestaurantPizza(
-            pizza_id = data['pizza_id'],
-            restaurant_id = data['restaurant_id'],
-            price = data['price']
+            pizza_id=data['pizza_id'],
+            restaurant_id=data['restaurant_id'],
+            price=data['price']
         )
 
-        return make_response(
-            jsonify({
-                "id": new_obj.id,
+        pizz = Pizza.query.filter_by(id=new_obj.pizza_id).all()
 
-            })
-        )
+        return make_response(jsonify([{
+            "id": pizza.id,
+            "name": pizza.name,
+            "ingredients": pizza.ingredients
+        } for pizza in pizz]), 201)
+
+api.add_resource(RestauPizza, "/restaurant_pizzas")
 
 if __name__ == '__main__':
     app.run(debug=True)

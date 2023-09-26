@@ -2,25 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 
-
 db = SQLAlchemy()
 
-# RestaurantPizza = db.Table(
-#     'restaurant_pizzas',
-#     db.metadata,
-#     db.Column('id', db.Integer, primary_key=True),
-#     db.Column('restaurant_id', db.Integer, db.ForeignKey('restaurants.id')),
-#     db.Column('pizza_id', db.Integer, db.ForeignKey('pizzas.id')),
-#     db.Column('price', db.Integer),
-#     db.Column('created_at', db.DateTime, server_default=db.func.now()),
-#     db.Column('updated_at', db.DateTime, onupdate=db.func.now())
-# )
-# @validates('price')
-# def validate_price(self, key, price):
-#     if price < 1 or price > 30:
-#         raise ValueError("Price must be between 1 to 30")
-        
-#     return price
 
 class RestaurantPizza(db.Model, SerializerMixin):
     __tablename__ = "restaurant_pizzas"
