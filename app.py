@@ -70,6 +70,10 @@ class Pizzas(Resource):
         )
 api.add_resource(Pizzas, '/pizzas')
 
+class Payment():
+    #code goes here
+    pass
+
 class RestauPizza(Resource):
     def post(self):
         data = request.get_json()
